@@ -1,4 +1,4 @@
-// components/CalendarView.tsx - Hiển thị task theo lịch
+// components/CalendarView.tsx - Clean calendar display
 
 import React, { useState } from 'react';
 import type { Task } from '../types';
@@ -59,21 +59,21 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
   };
 
   const monthNames = [
-    'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-    'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
     <div className="calendar-view">
       {/* Calendar Header */}
       <div className="calendar-header">
-        <button onClick={() => navigateMonth('prev')} className="nav-button">
+        <button onClick={() => navigateMonth('prev')} className="calendar-nav-button">
           ‹
         </button>
         <h2>{monthNames[month]} {year}</h2>
-        <button onClick={() => navigateMonth('next')} className="nav-button">
+        <button onClick={() => navigateMonth('next')} className="calendar-nav-button">
           ›
         </button>
       </div>
@@ -119,7 +119,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
                 
                 {dayTasks.length > 3 && (
                   <div className="more-tasks">
-                    +{dayTasks.length - 3} khác
+                    +{dayTasks.length - 3} more
                   </div>
                 )}
               </div>
@@ -131,7 +131,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
       {/* Quick Stats */}
       <div className="calendar-stats">
         <div className="stat-item">
-          <span className="stat-label">Tổng task tháng này:</span>
+          <span className="stat-label">Tasks this month:</span>
           <span className="stat-value">
             {tasks.filter(task => {
               const taskDate = new Date(task.dueDate);
@@ -141,7 +141,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
         </div>
         
         <div className="stat-item">
-          <span className="stat-label">Hoàn thành:</span>
+          <span className="stat-label">Completed:</span>
           <span className="stat-value">
             {tasks.filter(task => {
               const taskDate = new Date(task.dueDate);

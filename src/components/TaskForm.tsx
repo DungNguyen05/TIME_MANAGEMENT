@@ -1,4 +1,4 @@
-// components/TaskForm.tsx - Form tạo và chỉnh sửa task
+// components/TaskForm.tsx - Clean task creation and editing form
 
 import { useState } from 'react';
 import type { Task, TaskFormData, TaskFormErrors } from '../types';
@@ -25,15 +25,15 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
     const newErrors: TaskFormErrors = {};
 
     if (!formData.title.trim()) {
-      newErrors.title = 'Tiêu đề không được để trống';
+      newErrors.title = 'Title is required';
     }
 
     if (!formData.category.trim()) {
-      newErrors.category = 'Danh mục không được để trống';
+      newErrors.category = 'Category is required';
     }
 
     if (formData.estimatedTime < 5) {
-      newErrors.estimatedTime = 'Thời gian ước tính tối thiểu 5 phút';
+      newErrors.estimatedTime = 'Minimum estimated time is 5 minutes';
     }
 
     setErrors(newErrors);
@@ -65,64 +65,64 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
   return (
     <div className="task-form-overlay">
       <div className="task-form">
-        <h2>{task ? 'Chỉnh sửa Task' : 'Tạo Task Mới'}</h2>
+        <h2>{task ? 'Edit Task' : 'Create New Task'}</h2>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="title">Tiêu đề *</label>
+            <label htmlFor="title">Title *</label>
             <input
               id="title"
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              placeholder="Ví dụ: Hoàn thành bài tập Toán"
+              placeholder="e.g., Complete math homework"
               className={errors.title ? 'error' : ''}
             />
             {errors.title && <span className="error-text">{errors.title}</span>}
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Mô tả</label>
+            <label htmlFor="description">Description</label>
             <textarea
               id="description"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              placeholder="Mô tả chi tiết task..."
+              placeholder="Add detailed description of the task..."
               rows={3}
             />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="category">Danh mục *</label>
+              <label htmlFor="category">Category *</label>
               <input
                 id="category"
                 type="text"
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value)}
-                placeholder="Ví dụ: Học tập, Công việc"
+                placeholder="e.g., Study, Work, Personal"
                 className={errors.category ? 'error' : ''}
               />
               {errors.category && <span className="error-text">{errors.category}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="priority">Độ ưu tiên</label>
+              <label htmlFor="priority">Priority</label>
               <select
                 id="priority"
                 value={formData.priority}
                 onChange={(e) => handleChange('priority', e.target.value as Task['priority'])}
               >
-                <option value="low">Thấp</option>
-                <option value="medium">Trung bình</option>
-                <option value="high">Cao</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
               </select>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="dueDate">Deadline</label>
+              <label htmlFor="dueDate">Due Date</label>
               <input
                 id="dueDate"
                 type="date"
@@ -132,11 +132,12 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
             </div>
 
             <div className="form-group">
-              <label htmlFor="estimatedTime">Thời gian ước tính (phút) *</label>
+              <label htmlFor="estimatedTime">Estimated Time (minutes) *</label>
               <input
                 id="estimatedTime"
                 type="number"
                 min="5"
+                step="5"
                 value={formData.estimatedTime}
                 onChange={(e) => handleChange('estimatedTime', parseInt(e.target.value) || 0)}
                 className={errors.estimatedTime ? 'error' : ''}
@@ -147,10 +148,10 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
 
           <div className="form-actions">
             <button type="button" onClick={onCancel} className="btn-secondary">
-              Hủy
+              Cancel
             </button>
             <button type="submit" className="btn-primary">
-              {task ? 'Cập nhật' : 'Tạo Task'}
+              {task ? 'Update Task' : 'Create Task'}
             </button>
           </div>
         </form>

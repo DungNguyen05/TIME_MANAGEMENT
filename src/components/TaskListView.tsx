@@ -1,4 +1,4 @@
-// components/TaskListView.tsx - Hiển thị danh sách task
+// components/TaskListView.tsx - Clean task list display
 
 import React from 'react';
 import type { Task } from '../types';
@@ -21,9 +21,9 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
 
   const getPriorityLabel = (priority: Task['priority']) => {
     switch (priority) {
-      case 'high': return 'Cao';
-      case 'medium': return 'TB';
-      case 'low': return 'Thấp';
+      case 'high': return 'High';
+      case 'medium': return 'Medium';
+      case 'low': return 'Low';
     }
   };
 
@@ -34,20 +34,23 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     if (date.toDateString() === today.toDateString()) {
-      return 'Hôm nay';
+      return 'Today';
     } else if (date.toDateString() === tomorrow.toDateString()) {
-      return 'Ngày mai';
+      return 'Tomorrow';
     } else {
-      return date.toLocaleDateString('vi-VN');
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+      });
     }
   };
 
   if (sortedTasks.length === 0) {
     return (
       <div className="empty-state">
-        <div className="empty-icon">📝</div>
-        <h3>Chưa có task nào</h3>
-        <p>Bắt đầu bằng cách tạo task đầu tiên của bạn!</p>
+        <h3>No tasks yet</h3>
+        <p>Create your first task to get started with managing your time effectively!</p>
       </div>
     );
   }
@@ -74,10 +77,7 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
               <div className="task-header">
                 <h3 className="task-title">{task.title}</h3>
                 <div className="task-badges">
-                  <span 
-                    className={`priority-badge priority-${task.priority}`}
-                    style={{ backgroundColor: TaskService.getPriorityColor(task.priority) }}
-                  >
+                  <span className={`priority-badge priority-${task.priority}`}>
                     {getPriorityLabel(task.priority)}
                   </span>
                   <span className="category-badge">{task.category}</span>
@@ -90,11 +90,11 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
 
               <div className="task-meta">
                 <span className={`due-date ${isOverdue ? 'overdue' : ''}`}>
-                  📅 {formatDate(task.dueDate)}
-                  {isOverdue && ' (Quá hạn)'}
+                  Due: {formatDate(task.dueDate)}
+                  {isOverdue && ' (Overdue)'}
                 </span>
                 <span className="estimated-time">
-                  ⏱️ {TaskService.formatTime(task.estimatedTime)}
+                  Est: {TaskService.formatTime(task.estimatedTime)}
                 </span>
               </div>
             </div>
@@ -103,16 +103,16 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
               <button 
                 onClick={() => onEditTask(task)}
                 className="btn-icon"
-                title="Chỉnh sửa"
+                title="Edit task"
               >
-                ✏️
+                Edit
               </button>
               <button 
                 onClick={() => onDeleteTask(task.id)}
                 className="btn-icon delete"
-                title="Xóa"
+                title="Delete task"
               >
-                🗑️
+                Delete
               </button>
             </div>
           </div>
