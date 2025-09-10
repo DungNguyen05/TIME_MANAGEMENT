@@ -1,4 +1,4 @@
-// src/App.tsx - Component chính của ứng dụng
+// src/App.tsx - Main application component with clean web design
 
 import { useState, useEffect } from 'react';
 import type { Task, TaskFormData, ViewMode } from './types';
@@ -72,29 +72,21 @@ function App() {
   };
 
   const handleDeleteTask = (taskId: string) => {
-    if (window.confirm('Bạn có chắc muốn xóa task này?')) {
+    if (window.confirm('Are you sure you want to delete this task?')) {
       setTasks(prev => prev.filter(task => task.id !== taskId));
     }
   };
 
   const handleTaskClick = (_task: Task) => {
-    // When clicking task in calendar view, switch to list view and highlight
+    // When clicking task in calendar view, switch to list view
     setCurrentView('list');
-  };
-
-  const getViewIcon = (view: ViewMode) => {
-    switch (view) {
-      case 'list': return '📋';
-      case 'calendar': return '📅';
-      case 'analytics': return '📊';
-    }
   };
 
   const getViewTitle = (view: ViewMode) => {
     switch (view) {
-      case 'list': return 'Danh sách';
-      case 'calendar': return 'Lịch';
-      case 'analytics': return 'Thống kê';
+      case 'list': return 'Tasks';
+      case 'calendar': return 'Calendar';
+      case 'analytics': return 'Analytics';
     }
   };
 
@@ -103,8 +95,8 @@ function App() {
       {/* Header */}
       <header className="app-header">
         <div className="header-content">
-          <h1>📚 Smart Todo</h1>
-          <p>Quản lý thời gian thông minh cho sinh viên</p>
+          <h1>Smart Todo</h1>
+          <p>Intelligent time management for students</p>
         </div>
       </header>
 
@@ -117,8 +109,7 @@ function App() {
               onClick={() => setCurrentView(view)}
               className={`nav-button ${currentView === view ? 'active' : ''}`}
             >
-              <span className="nav-icon">{getViewIcon(view)}</span>
-              <span className="nav-label">{getViewTitle(view)}</span>
+              {getViewTitle(view)}
             </button>
           ))}
         </div>
@@ -127,25 +118,20 @@ function App() {
           onClick={() => setShowForm(true)}
           className="btn-primary add-task-btn"
         >
-          <span>➕</span>
-          <span>Thêm Task</span>
+          + New Task
         </button>
       </nav>
-
 
       {/* Main Content */}
       <main className="app-main">
         <div className="view-header">
-          <h2>
-            <span className="view-icon">{getViewIcon(currentView)}</span>
-            {getViewTitle(currentView)}
-          </h2>
+          <h2>{getViewTitle(currentView)}</h2>
           
           {currentView === 'list' && (
             <div className="view-stats">
-              <span>{tasks.filter(t => !t.completed).length} đang làm</span>
-              <span>{tasks.filter(t => t.completed).length} hoàn thành</span>
-              <span>{tasks.filter(t => TaskService.isOverdue(t)).length} quá hạn</span>
+              <span>Active: {tasks.filter(t => !t.completed).length}</span>
+              <span>Completed: {tasks.filter(t => t.completed).length}</span>
+              <span>Overdue: {tasks.filter(t => TaskService.isOverdue(t)).length}</span>
             </div>
           )}
         </div>
