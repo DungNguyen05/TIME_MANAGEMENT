@@ -1,4 +1,4 @@
-// src/App.tsx - Main application component with clean web design
+// src/App.tsx - Component chính của ứng dụng (Web-focused)
 
 import { useState, useEffect } from 'react';
 import type { Task, TaskFormData, ViewMode } from './types';
@@ -72,7 +72,7 @@ function App() {
   };
 
   const handleDeleteTask = (taskId: string) => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
+    if (window.confirm('Bạn có chắc muốn xóa task này?')) {
       setTasks(prev => prev.filter(task => task.id !== taskId));
     }
   };
@@ -84,7 +84,7 @@ function App() {
 
   const getViewTitle = (view: ViewMode) => {
     switch (view) {
-      case 'list': return 'Tasks';
+      case 'list': return 'Task List';
       case 'calendar': return 'Calendar';
       case 'analytics': return 'Analytics';
     }
@@ -95,30 +95,40 @@ function App() {
       {/* Header */}
       <header className="app-header">
         <div className="header-content">
-          <h1>Smart Todo</h1>
-          <p>Intelligent time management for students</p>
+          <h1>Smart Todo App</h1>
+          <p>Quản lý thời gian thông minh cho sinh viên đại học</p>
         </div>
       </header>
 
       {/* Navigation */}
       <nav className="app-nav">
         <div className="nav-views">
-          {(['list', 'calendar', 'analytics'] as ViewMode[]).map(view => (
-            <button
-              key={view}
-              onClick={() => setCurrentView(view)}
-              className={`nav-button ${currentView === view ? 'active' : ''}`}
-            >
-              {getViewTitle(view)}
-            </button>
-          ))}
+          <button
+            onClick={() => setCurrentView('list')}
+            className={`nav-button ${currentView === 'list' ? 'active' : ''}`}
+          >
+            <span>Tasks</span>
+          </button>
+          <button
+            onClick={() => setCurrentView('calendar')}
+            className={`nav-button ${currentView === 'calendar' ? 'active' : ''}`}
+          >
+            <span>Calendar</span>
+          </button>
+          <button
+            onClick={() => setCurrentView('analytics')}
+            className={`nav-button ${currentView === 'analytics' ? 'active' : ''}`}
+          >
+            <span>Analytics</span>
+          </button>
         </div>
 
         <button 
           onClick={() => setShowForm(true)}
           className="btn-primary add-task-btn"
         >
-          + New Task
+          <span>+</span>
+          <span>Add Task</span>
         </button>
       </nav>
 

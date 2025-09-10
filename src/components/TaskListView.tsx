@@ -1,4 +1,4 @@
-// components/TaskListView.tsx - Clean task list display
+// components/TaskListView.tsx - Hiển thị danh sách task (Web-focused)
 
 import React from 'react';
 import type { Task } from '../types';
@@ -41,7 +41,7 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
       return date.toLocaleDateString('en-US', { 
         month: 'short', 
         day: 'numeric',
-        year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+        year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined 
       });
     }
   };
@@ -50,7 +50,7 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
     return (
       <div className="empty-state">
         <h3>No tasks yet</h3>
-        <p>Create your first task to get started with managing your time effectively!</p>
+        <p>Create your first task to get started!</p>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-// components/TaskForm.tsx - Clean task creation and editing form
+// components/TaskForm.tsx - Form tạo và chỉnh sửa task (Web-focused)
 
 import { useState } from 'react';
 import type { Task, TaskFormData, TaskFormErrors } from '../types';
@@ -33,7 +33,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
     }
 
     if (formData.estimatedTime < 5) {
-      newErrors.estimatedTime = 'Minimum estimated time is 5 minutes';
+      newErrors.estimatedTime = 'Minimum time is 5 minutes';
     }
 
     setErrors(newErrors);
@@ -87,7 +87,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
               id="description"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              placeholder="Add detailed description of the task..."
+              placeholder="Add task details..."
               rows={3}
             />
           </div>

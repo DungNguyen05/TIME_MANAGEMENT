@@ -1,4 +1,4 @@
-// components/CalendarView.tsx - Clean calendar display
+// components/CalendarView.tsx - Hiển thị task theo lịch (Web-focused)
 
 import React, { useState } from 'react';
 import type { Task } from '../types';
@@ -69,11 +69,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
     <div className="calendar-view">
       {/* Calendar Header */}
       <div className="calendar-header">
-        <button onClick={() => navigateMonth('prev')} className="calendar-nav-button">
+        <button onClick={() => navigateMonth('prev')} className="nav-button">
           ‹
         </button>
         <h2>{monthNames[month]} {year}</h2>
-        <button onClick={() => navigateMonth('next')} className="calendar-nav-button">
+        <button onClick={() => navigateMonth('next')} className="nav-button">
           ›
         </button>
       </div>
@@ -112,7 +112,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
                     title={task.title}
                   >
                     <span className="task-pill-title">
-                      {task.title.length > 15 ? task.title.substring(0, 15) + '...' : task.title}
+                      {task.title.length > 20 ? task.title.substring(0, 20) + '...' : task.title}
                     </span>
                   </div>
                 ))}
@@ -131,7 +131,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, onTaskClick }
       {/* Quick Stats */}
       <div className="calendar-stats">
         <div className="stat-item">
-          <span className="stat-label">Tasks this month:</span>
+          <span className="stat-label">Total tasks this month:</span>
           <span className="stat-value">
             {tasks.filter(task => {
               const taskDate = new Date(task.dueDate);

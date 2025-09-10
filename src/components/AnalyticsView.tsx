@@ -1,4 +1,4 @@
-// components/AnalyticsView.tsx - Clean analytics display
+// components/AnalyticsView.tsx - Hiển thị thống kê và phân tích (Web-focused)
 
 import React from 'react';
 import type { Task } from '../types';
@@ -12,9 +12,9 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
   const stats = TaskService.calculateStats(tasks);
 
   const getProgressBarColor = (percentage: number): string => {
-    if (percentage >= 80) return '#16a34a';
+    if (percentage >= 80) return '#10b981';
     if (percentage >= 60) return '#f59e0b';
-    return '#dc2626';
+    return '#ef4444';
   };
 
   const recentTasks = tasks
@@ -36,12 +36,20 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
     })
     .length;
 
+  if (stats.totalTasks === 0) {
+    return (
+      <div className="empty-analytics">
+        <h3>No data to analyze</h3>
+        <p>Create some tasks to see analytics and insights!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="analytics-view">
       {/* Overview Cards */}
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon">ALL</div>
           <div className="stat-content">
             <h3>Total Tasks</h3>
             <div className="stat-number">{stats.totalTasks}</div>
@@ -49,7 +57,6 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon" style={{ backgroundColor: '#16a34a' }}>✓</div>
           <div className="stat-content">
             <h3>Completed</h3>
             <div className="stat-number">{stats.completedTasks}</div>
@@ -60,7 +67,6 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
         </div>
 
         <div className="stat-card overdue">
-          <div className="stat-icon" style={{ backgroundColor: '#dc2626' }}>!</div>
           <div className="stat-content">
             <h3>Overdue</h3>
             <div className="stat-number">{stats.overdueTasks}</div>
@@ -68,7 +74,6 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon" style={{ backgroundColor: '#f59e0b' }}>T</div>
           <div className="stat-content">
             <h3>Avg Time</h3>
             <div className="stat-number">
@@ -104,7 +109,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
 
         {Object.keys(stats.productivityByCategory).length === 0 && (
           <div className="empty-analytics">
-            <p>No data to analyze yet. Create some tasks to see your productivity stats!</p>
+            <p>No categories found. Create tasks with different categories to see productivity breakdown.</p>
           </div>
         )}
       </div>
@@ -114,31 +119,28 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
         <h3>Quick Insights</h3>
         <div className="insights-grid">
           <div className="insight-card">
-            <div className="insight-icon">📊</div>
             <div className="insight-content">
-              <h4>This Week</h4>
+              <h4>Recent Activity</h4>
               <p>{recentTasks} tasks created in the last 7 days</p>
             </div>
           </div>
 
           <div className="insight-card">
-            <div className="insight-icon">⏰</div>
             <div className="insight-content">
-              <h4>Upcoming</h4>
-              <p>{upcomingTasks} tasks due within 3 days</p>
+              <h4>Upcoming Deadlines</h4>
+              <p>{upcomingTasks} tasks due in the next 3 days</p>
             </div>
           </div>
 
           <div className="insight-card">
-            <div className="insight-icon">🎯</div>
             <div className="insight-content">
-              <h4>Performance</h4>
+              <h4>Performance Status</h4>
               <p>
                 {stats.completionRate >= 80 
                   ? 'Excellent! Keep it up!' 
                   : stats.completionRate >= 60 
-                    ? 'Good! Room for improvement'
-                    : 'Need to focus more'
+                    ? 'Good work! Room for improvement'
+                    : 'Focus needed on completing tasks'
                 }
               </p>
             </div>
@@ -152,36 +154,31 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ tasks }) => {
         <div className="tips-container">
           {stats.overdueTasks > 0 && (
             <div className="tip-item warning">
-              <div className="tip-icon">!</div>
-              <p>You have {stats.overdueTasks} overdue tasks. Consider prioritizing them first!</p>
+              <p>You have {stats.overdueTasks} overdue tasks. Consider prioritizing them to get back on track.</p>
             </div>
           )}
           
           {stats.completionRate < 50 && (
             <div className="tip-item info">
-              <div className="tip-icon">💡</div>
-              <p>Try breaking down large tasks into smaller, manageable pieces.</p>
+              <p>Try breaking down large tasks into smaller, more manageable subtasks to improve completion rates.</p>
             </div>
           )}
           
           {stats.averageCompletionTime > 120 && (
             <div className="tip-item info">
-              <div className="tip-icon">⏱</div>
-              <p>Your tasks might be too long. Consider more accurate time estimation.</p>
+              <p>Your tasks might be taking longer than expected. Consider more accurate time estimation or task breakdown.</p>
             </div>
           )}
           
           {stats.totalTasks > 0 && stats.completionRate >= 80 && (
             <div className="tip-item success">
-              <div className="tip-icon">✓</div>
-              <p>Great job! You're managing your time very well!</p>
+              <p>Outstanding work! You're managing your time very effectively. Keep up the great momentum!</p>
             </div>
           )}
 
-          {stats.totalTasks === 0 && (
+          {recentTasks === 0 && (
             <div className="tip-item info">
-              <div className="tip-icon">📝</div>
-              <p>Start by creating your first task to begin tracking your productivity.</p>
+              <p>You haven't created any tasks recently. Consider planning your upcoming work to stay organized.</p>
             </div>
           )}
         </div>
