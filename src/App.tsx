@@ -128,9 +128,10 @@ function App() {
           className="btn-primary add-task-btn"
         >
           <span>➕</span>
-          Thêm Task
+          <span>Thêm Task</span>
         </button>
       </nav>
+
 
       {/* Main Content */}
       <main className="app-main">
