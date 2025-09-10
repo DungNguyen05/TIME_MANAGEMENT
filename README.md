@@ -4,6 +4,23 @@
 
 ## 🚀 Project Setup & Usage
 
+### Step 1: Install Node.js
+**Required:** Node.js version **20.19.0** or higher
+
+```bash
+# macOS/Linux
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+source ~/.bashrc
+nvm install 20.19.1
+nvm use 20.19.1
+
+# Windows: Download nvm-windows from GitHub, then:
+nvm install 20.19.1
+nvm use 20.19.1
+```
+
+### Step 2: Project Setup & Usage
+
 **Cách cài đặt và chạy dự án:**
 
 ```bash
@@ -23,6 +40,14 @@ npm run build
 # Preview production build
 npm run preview
 ```
+
+**⚠️ Important:** If you encounter `crypto.hash is not a function` error, upgrade Node.js to 20.19.0 or higher.
+
+**✅ System Requirements:**
+| Tool | Required Version | Recommended |
+|------|------------------|-------------|
+| Node.js | ≥ 20.19.0 | 20.19.1 LTS |
+| NPM | ≥ 10.0.0 | Auto-installed |
 
 ## 🔗 Deployed Web URL
 ✍️ [Paste your deployment link here]
@@ -113,7 +138,7 @@ npm run preview
 **🛠️ Tech Stack:**
 
 - **Frontend Framework**: React 19.1.1 + TypeScript
-- **Build Tool**: Vite 7.1.2
+- **Build Tool**: Vite 6.0.5 (Compatible with Node.js 20.19+)
 - **Styling**: Pure CSS3 với CSS Grid & Flexbox
 - **State Management**: React useState & useEffect hooks
 - **Data Persistence**: Browser LocalStorage API
@@ -306,6 +331,8 @@ interface Task {
 - [x] Clean, maintainable code structure
 - [x] User-friendly Vietnamese interface
 - [x] All ✍️ sections filled in README
+- [x] Node.js compatibility guide added
+- [x] Prerequisites and installation instructions
 
 ---
 
