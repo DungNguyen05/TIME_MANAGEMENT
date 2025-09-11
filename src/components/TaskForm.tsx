@@ -1,4 +1,4 @@
-// components/TaskForm.tsx - Form tạo và chỉnh sửa task (Web-focused)
+// components/TaskForm.tsx - Form tạo và chỉnh sửa task (Desktop Web-focused)
 
 import { useState } from 'react';
 import type { Task, TaskFormData, TaskFormErrors } from '../types';
@@ -25,7 +25,9 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
     const newErrors: TaskFormErrors = {};
 
     if (!formData.title.trim()) {
-      newErrors.title = 'Title is required';
+      newErrors.title = 'Task title is required';
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = 'Title must be at least 3 characters';
     }
 
     if (!formData.category.trim()) {
@@ -34,6 +36,16 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
 
     if (formData.estimatedTime < 5) {
       newErrors.estimatedTime = 'Minimum time is 5 minutes';
+    } else if (formData.estimatedTime > 1440) {
+      newErrors.estimatedTime = 'Maximum time is 24 hours (1440 minutes)';
+    }
+
+    const selectedDate = new Date(formData.dueDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+      newErrors.dueDate = 'Due date cannot be in the past';
     }
 
     setErrors(newErrors);
@@ -62,96 +74,120 @@ export const TaskForm: React.FC<TaskFormProps> = ({ task, onSubmit, onCancel }) 
     }
   };
 
+  const commonCategories = [
+    'Study', 'Assignment', 'Project', 'Research', 'Reading',
+    'Work', 'Personal', 'Health', 'Social', 'Hobby'
+  ];
+
   return (
-    <div className="task-form-overlay">
+    <div className="task-form-overlay" onClick={(e) => {
+      if (e.target === e.currentTarget) onCancel();
+    }}>
       <div className="task-form">
-        <h2>{task ? 'Edit Task' : 'Create New Task'}</h2>
+        <h2>
+          {task ? '✏️ Edit Task' : '➕ Create New Task'}
+        </h2>
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="title">Title *</label>
+            <label htmlFor="title">📝 Task Title *</label>
             <input
               id="title"
               type="text"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
-              placeholder="e.g., Complete math homework"
+              placeholder="e.g., Complete math homework, Study for exam..."
               className={errors.title ? 'error' : ''}
+              autoFocus
             />
-            {errors.title && <span className="error-text">{errors.title}</span>}
+            {errors.title && <span className="error-text">⚠️ {errors.title}</span>}
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">📄 Description (Optional)</label>
             <textarea
               id="description"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              placeholder="Add task details..."
+              placeholder="Add additional details about this task..."
               rows={3}
             />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="category">Category *</label>
+              <label htmlFor="category">📂 Category *</label>
               <input
                 id="category"
                 type="text"
+                list="category-suggestions"
                 value={formData.category}
                 onChange={(e) => handleChange('category', e.target.value)}
                 placeholder="e.g., Study, Work, Personal"
                 className={errors.category ? 'error' : ''}
               />
-              {errors.category && <span className="error-text">{errors.category}</span>}
+              <datalist id="category-suggestions">
+                {commonCategories.map(cat => (
+                  <option key={cat} value={cat} />
+                ))}
+              </datalist>
+              {errors.category && <span className="error-text">⚠️ {errors.category}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="priority">Priority</label>
+              <label htmlFor="priority">🎯 Priority Level</label>
               <select
                 id="priority"
                 value={formData.priority}
                 onChange={(e) => handleChange('priority', e.target.value as Task['priority'])}
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option value="low">🟢 Low Priority</option>
+                <option value="medium">🟡 Medium Priority</option>
+                <option value="high">🔴 High Priority</option>
               </select>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="dueDate">Due Date</label>
+              <label htmlFor="dueDate">📅 Due Date</label>
               <input
                 id="dueDate"
                 type="date"
                 value={formData.dueDate}
                 onChange={(e) => handleChange('dueDate', e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                className={errors.dueDate ? 'error' : ''}
               />
+              {errors.dueDate && <span className="error-text">⚠️ {errors.dueDate}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="estimatedTime">Estimated Time (minutes) *</label>
+              <label htmlFor="estimatedTime">⏱️ Estimated Time (minutes) *</label>
               <input
                 id="estimatedTime"
                 type="number"
                 min="5"
+                max="1440"
                 step="5"
                 value={formData.estimatedTime}
                 onChange={(e) => handleChange('estimatedTime', parseInt(e.target.value) || 0)}
                 className={errors.estimatedTime ? 'error' : ''}
+                placeholder="30"
               />
-              {errors.estimatedTime && <span className="error-text">{errors.estimatedTime}</span>}
+              {errors.estimatedTime && <span className="error-text">⚠️ {errors.estimatedTime}</span>}
+              <small style={{color: '#6b7280', fontSize: '0.8rem', marginTop: '0.25rem', display: 'block'}}>
+                Common times: 15min (quick task), 30min (normal), 60min (complex), 120min (project)
+              </small>
             </div>
           </div>
 
           <div className="form-actions">
             <button type="button" onClick={onCancel} className="btn-secondary">
-              Cancel
+              ❌ Cancel
             </button>
             <button type="submit" className="btn-primary">
-              {task ? 'Update Task' : 'Create Task'}
+              {task ? '💾 Update Task' : '➕ Create Task'}
             </button>
           </div>
         </form>

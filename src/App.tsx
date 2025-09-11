@@ -1,4 +1,4 @@
-// src/App.tsx - Component chính của ứng dụng (Web-focused)
+// src/App.tsx - Component chính của ứng dụng (Desktop Web-focused)
 
 import { useState, useEffect } from 'react';
 import type { Task, TaskFormData, ViewMode } from './types';
@@ -84,9 +84,17 @@ function App() {
 
   const getViewTitle = (view: ViewMode) => {
     switch (view) {
-      case 'list': return 'Task List';
-      case 'calendar': return 'Calendar';
-      case 'analytics': return 'Analytics';
+      case 'list': return '📋 Task Manager';
+      case 'calendar': return '📅 Calendar View';
+      case 'analytics': return '📊 Analytics Dashboard';
+    }
+  };
+
+  const getViewIcon = (view: ViewMode) => {
+    switch (view) {
+      case 'list': return '📋';
+      case 'calendar': return '📅';
+      case 'analytics': return '📊';
     }
   };
 
@@ -95,8 +103,8 @@ function App() {
       {/* Header */}
       <header className="app-header">
         <div className="header-content">
-          <h1>Smart Todo App</h1>
-          <p>Quản lý thời gian thông minh cho sinh viên đại học</p>
+          <h1>🎯 Smart Todo App</h1>
+          <p>Quản lý thời gian thông minh cho sinh viên đại học Việt Nam</p>
         </div>
       </header>
 
@@ -107,18 +115,21 @@ function App() {
             onClick={() => setCurrentView('list')}
             className={`nav-button ${currentView === 'list' ? 'active' : ''}`}
           >
+            <span>📋</span>
             <span>Tasks</span>
           </button>
           <button
             onClick={() => setCurrentView('calendar')}
             className={`nav-button ${currentView === 'calendar' ? 'active' : ''}`}
           >
+            <span>📅</span>
             <span>Calendar</span>
           </button>
           <button
             onClick={() => setCurrentView('analytics')}
             className={`nav-button ${currentView === 'analytics' ? 'active' : ''}`}
           >
+            <span>📊</span>
             <span>Analytics</span>
           </button>
         </div>
@@ -127,21 +138,24 @@ function App() {
           onClick={() => setShowForm(true)}
           className="btn-primary add-task-btn"
         >
-          <span>+</span>
-          <span>Add Task</span>
+          <span>➕</span>
+          <span>Add New Task</span>
         </button>
       </nav>
 
       {/* Main Content */}
       <main className="app-main">
         <div className="view-header">
-          <h2>{getViewTitle(currentView)}</h2>
+          <h2>
+            <span>{getViewIcon(currentView)}</span>
+            {getViewTitle(currentView)}
+          </h2>
           
           {currentView === 'list' && (
             <div className="view-stats">
-              <span>Active: {tasks.filter(t => !t.completed).length}</span>
-              <span>Completed: {tasks.filter(t => t.completed).length}</span>
-              <span>Overdue: {tasks.filter(t => TaskService.isOverdue(t)).length}</span>
+              <span>📝 Active: {tasks.filter(t => !t.completed).length}</span>
+              <span>✅ Completed: {tasks.filter(t => t.completed).length}</span>
+              <span>⚠️ Overdue: {tasks.filter(t => TaskService.isOverdue(t)).length}</span>
             </div>
           )}
         </div>
